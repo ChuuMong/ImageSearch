@@ -3,6 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+def getPropertyFile() {
+    Properties prop = new Properties()
+    prop.load(new FileInputStream(file(rootProject.file("apikey.properties"))))
+    return prop
+}
+
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
@@ -10,6 +16,10 @@ android {
         applicationId "space.chuumong.imagesearch"
         versionCode 1
         versionName "1.0"
+
+        Properties prop = getPropertyFile()
+        buildConfigField "String", "API_KEY", prop['API_KEY']
+        buildConfigField "String", "BASE_URL", "\"https://dapi.kakao.com/v2/search/\""
     }
     buildTypes {
         release {
