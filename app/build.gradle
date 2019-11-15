@@ -30,4 +30,8 @@ dependencies {
     implementation Dependencies.ktx
 
     implementation Dependencies.constraintLayout
+
+    implementation Dependencies.rxjava
+    implementation Dependencies.rxAndroid
+
 }
