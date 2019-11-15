@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.viewmodel.ext.android.getViewModel
 import space.chuumong.data.Result
@@ -11,6 +12,7 @@ import space.chuumong.domain.entities.SearchImageResult
 import space.chuumong.imagesearch.ui.BaseActivity
 import space.chuumong.imagesearch.R
 import space.chuumong.imagesearch.databinding.ActivityMainBinding
+import space.chuumong.imagesearch.ui.adapter.SearchImageAdapter
 import space.chuumong.imagesearch.utils.SoftKeyboardUtils
 import space.chuumong.imagesearch.utils.afterTextChangeEvents
 import space.chuumong.imagesearch.viewmodel.SearchImageViewModel
@@ -26,11 +28,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun getLayoutId() = R.layout.activity_main
 
     private val searchImageViewModel: SearchImageViewModel by lazy { getViewModel() as SearchImageViewModel }
+    private val searchImageAdapter = SearchImageAdapter()
 
     private var isAlreadySearch = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        binding.rvImage.layoutManager = LinearLayoutManager(this)
+        binding.rvImage.adapter = searchImageAdapter
 
         setSearchAfterTextChangeEvent()
 
@@ -73,7 +80,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         searchImageViewModel.searchImage(query, object : Result<SearchImageResult> {
             override fun onSuccess(result: SearchImageResult) {
-
+                searchImageAdapter.addAll(result.images)
             }
 
             override fun onFail(t: Throwable) {

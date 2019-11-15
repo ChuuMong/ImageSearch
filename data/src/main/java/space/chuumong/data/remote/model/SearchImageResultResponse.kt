@@ -1,6 +1,7 @@
 package space.chuumong.data.remote.model
 
 import com.google.gson.annotations.SerializedName
+import space.chuumong.data.const.HTTPS_START_WITH
 import space.chuumong.domain.entities.SearchImage
 import space.chuumong.domain.entities.SearchImageMeta
 import space.chuumong.domain.entities.SearchImageResult
@@ -10,20 +11,17 @@ data class SearchImageResultResponse(
     val images: List<SearchImageResponse>,
     @SerializedName("meta")
     val meta: SearchImageMetaResponse
-) {
-    fun toEntity(): SearchImageResult {
-        val images = mutableListOf<SearchImage>()
-        this.images.forEach { images.add(it.toEntity()) }
-
-        return SearchImageResult(images, meta.toEntity())
-    }
-}
+)
 
 data class SearchImageResponse(
     @SerializedName("image_url")
-    val imageUrl: String
+    val imageUrl: String,
+    @SerializedName("width")
+    val width: Int,
+    @SerializedName("height")
+    val height: Int
 ) {
-    fun toEntity() = SearchImage(imageUrl)
+    fun toEntity() = SearchImage(imageUrl, width, height)
 }
 
 data class SearchImageMetaResponse(

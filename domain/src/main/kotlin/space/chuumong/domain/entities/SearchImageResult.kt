@@ -6,7 +6,9 @@ data class SearchImageResult(
 )
 
 data class SearchImage(
-    val imageUrl: String
+    val imageUrl: String,
+    val width: Int,
+    val height: Int
 )
 
 data class SearchImageMeta(

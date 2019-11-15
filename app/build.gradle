@@ -52,4 +52,6 @@ dependencies {
 
     implementation Dependencies.rxjava
     implementation Dependencies.rxAndroid
+
+    implementation Dependencies.fresco
 }

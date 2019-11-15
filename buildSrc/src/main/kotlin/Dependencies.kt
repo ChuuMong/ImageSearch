@@ -17,11 +17,12 @@ object Versions {
     const val koin = "2.0.1"
 
     const val reftofit = "2.6.1"
-    const val okhttp = "4.2.0"
+    const val okhttp = "3.12.0"
     const val gson = "2.8.5"
     const val rxjava = "2.2.12"
     const val rxAndroid = "2.1.1"
-    
+
+    const val fresco = "2.0.0"
 }
 
 object Dependencies {
@@ -52,4 +53,5 @@ object Dependencies {
     const val rxjava = "io.reactivex.rxjava2:rxjava:${Versions.rxjava}"
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
 
+    const val fresco = "com.facebook.fresco:fresco:${Versions.fresco}"
 }

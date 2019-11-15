@@ -57,12 +57,12 @@ class NetworkErrorInterceptor : Interceptor {
 
             Log.e(
                 TAG,
-                "Server response is not successful, try count : $tryCount, url : ${request.url}, response code : ${response?.code}"
+                "Server response is not successful, try count : $tryCount, url : ${request.url()}, response code : ${response?.code()}"
             )
         }
 
         if (response == null || !response.isSuccessful) {
-            throw ServerErrorException(response?.code ?: FAIL_RESPONSE)
+            throw ServerErrorException(response?.code() ?: FAIL_RESPONSE)
         }
 
         return response
