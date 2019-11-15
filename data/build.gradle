@@ -1,0 +1,39 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+def getPropertyFile() {
+    Properties prop = new Properties()
+    prop.load(new FileInputStream(file(rootProject.file("apikey.properties"))))
+    return prop
+}
+
+android {
+    defaultConfig {
+        Properties prop = getPropertyFile()
+        buildConfigField "String", "API_KEY", prop['API_KEY']
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+}
+
+dependencies {
+    implementation project(':domain')
+
+    implementation Dependencies.kotlinStdlib
+
+    implementation Dependencies.ktx
+
+    implementation Dependencies.retrofit
+
+    implementation Dependencies.okttp
+    implementation Dependencies.okhttpLogging
+
+    implementation Dependencies.rxjava
+    implementation Dependencies.rxAndroid
+
+    implementation Dependencies.gson
+}

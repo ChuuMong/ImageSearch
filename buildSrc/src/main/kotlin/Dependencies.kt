@@ -21,8 +21,7 @@ object Versions {
     const val gson = "2.8.5"
     const val rxjava = "2.2.12"
     const val rxAndroid = "2.1.1"
-
-    const val glide = "4.9.0"
+    
 }
 
 object Dependencies {
@@ -53,6 +52,4 @@ object Dependencies {
     const val rxjava = "io.reactivex.rxjava2:rxjava:${Versions.rxjava}"
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
 
-    const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
-    const val glideComplier = "com.github.bumptech.glide:compiler:${Versions.glide}"
 }

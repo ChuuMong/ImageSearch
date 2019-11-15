@@ -5,11 +5,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
+import org.koin.android.viewmodel.ext.android.getViewModel
+import space.chuumong.data.Result
+import space.chuumong.domain.entities.SearchImageResult
 import space.chuumong.imagesearch.ui.BaseActivity
 import space.chuumong.imagesearch.R
 import space.chuumong.imagesearch.databinding.ActivityMainBinding
 import space.chuumong.imagesearch.utils.SoftKeyboardUtils
 import space.chuumong.imagesearch.utils.afterTextChangeEvents
+import space.chuumong.imagesearch.viewmodel.SearchImageViewModel
 import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -20,6 +24,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun getLayoutId() = R.layout.activity_main
+
+    private val searchImageViewModel: SearchImageViewModel by lazy { getViewModel() as SearchImageViewModel }
 
     private var isAlreadySearch = false
 
@@ -33,6 +39,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 isAlreadySearch = true
                 Log.d("text", v.text.toString())
                 clearSearchFocus()
+                searchImages()
 
                 return@setOnEditorActionListener true
             }
@@ -55,9 +62,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
                 Log.d(TAG, it)
                 clearSearchFocus()
+                searchImages()
             }, {
                 Log.e(TAG, it.message, it)
             })
+    }
+
+    private fun searchImages() {
+        val query = binding.etSearch.text.toString()
+
+        searchImageViewModel.searchImage(query, object : Result<SearchImageResult> {
+            override fun onSuccess(result: SearchImageResult) {
+
+            }
+
+            override fun onFail(t: Throwable) {
+                Log.e(TAG, t.message, t)
+            }
+        })
     }
 
     private fun clearSearchFocus() {

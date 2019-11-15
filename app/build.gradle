@@ -3,12 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-def getPropertyFile() {
-    Properties prop = new Properties()
-    prop.load(new FileInputStream(file(rootProject.file("apikey.properties"))))
-    return prop
-}
-
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
@@ -17,8 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        Properties prop = getPropertyFile()
-        buildConfigField "String", "API_KEY", prop['API_KEY']
+
         buildConfigField "String", "BASE_URL", "\"https://dapi.kakao.com/v2/search/\""
     }
     buildTypes {
@@ -33,15 +26,30 @@ android {
     }
 }
 
+
 dependencies {
+
+    implementation project(':domain')
+    implementation project(':data')
+
     implementation Dependencies.kotlinStdlib
 
     implementation Dependencies.appcompat
     implementation Dependencies.ktx
 
     implementation Dependencies.constraintLayout
+    implementation Dependencies.recyclerView
+
+    implementation Dependencies.koin
+    implementation Dependencies.koinViewModel
+
+    implementation Dependencies.retrofit
+    implementation Dependencies.retrofitGsonConvert
+    implementation Dependencies.retrofitRxJava2Adapter
+
+    implementation Dependencies.okttp
+    implementation Dependencies.okhttpLogging
 
     implementation Dependencies.rxjava
     implementation Dependencies.rxAndroid
-
 }
