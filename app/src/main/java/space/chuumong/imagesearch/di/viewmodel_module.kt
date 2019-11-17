@@ -5,5 +5,5 @@ import space.chuumong.imagesearch.viewmodel.SearchImageViewModel
 
 val viewModelModule = module {
 
-    factory { SearchImageViewModel(get()) }
+    factory { SearchImageViewModel(get(), get()) }
 }

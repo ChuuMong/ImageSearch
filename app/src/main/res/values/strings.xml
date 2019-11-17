@@ -6,4 +6,5 @@
     <string name="retry">재시도</string>
 
     <string name="search_image_result_empty">검색결과가 존재하지 않습니다.</string>
+    <string name="search_image_not_input_query">검색어가 입력되지 않았습니다.</string>
 </resources>

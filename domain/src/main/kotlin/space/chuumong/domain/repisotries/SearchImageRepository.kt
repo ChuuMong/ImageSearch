@@ -9,4 +9,5 @@ interface SearchImageRepository {
     fun searchImages(query: String): Single<SearchImageResult>
 
     fun searchMoreImages(query: String, page: Int): Single<SearchImageResult>
+
 }

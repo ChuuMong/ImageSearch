@@ -17,7 +17,7 @@ class SearchImageRepositoryImpl(
             .map(mapper.toSearchImageResultEntity())
             .observeOn(AndroidSchedulers.mainThread())
     }
-    
+
     override fun searchMoreImages(query: String, page: Int): Single<SearchImageResult> {
         return remoteDataSource.searchImage(query, page)
             .map(mapper.toSearchImageResultEntity())

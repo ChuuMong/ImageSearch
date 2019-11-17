@@ -38,6 +38,11 @@ class SearchImageAdapter : RecyclerView.Adapter<SearchImageAdapter.SearchImageVi
         notifyDataSetChanged()
     }
 
+    fun addMore(items: List<SearchImage>) {
+        images.addAll(items)
+        notifyDataSetChanged()
+    }
+
     inner class SearchImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val ivImage = view.findViewById<SimpleDraweeView>(R.id.iv_image)
 

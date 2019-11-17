@@ -13,6 +13,7 @@ import space.chuumong.imagesearch.ui.BaseActivity
 import space.chuumong.imagesearch.R
 import space.chuumong.imagesearch.databinding.ActivityMainBinding
 import space.chuumong.imagesearch.ui.adapter.SearchImageAdapter
+import space.chuumong.imagesearch.ui.view.LoadMoreScrollListener
 import space.chuumong.imagesearch.ui.view.showNoTitleTwoButtonsDialog
 import space.chuumong.imagesearch.utils.SoftKeyboardUtils
 import space.chuumong.imagesearch.utils.afterTextChangeEvents
@@ -23,7 +24,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     companion object {
         private const val TAG = "MainActivity"
+
         private const val DEFAULT_SEARCH_DEBOUNCE_TIME = 1L
+
+        private const val START_SEARCH_PAGE = 2
     }
 
     override fun getLayoutId() = R.layout.activity_main
@@ -31,7 +35,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private val searchImageViewModel: SearchImageViewModel by lazy { getViewModel() as SearchImageViewModel }
     private val searchImageAdapter = SearchImageAdapter()
 
+    private val loadMoreScrollListener = object : LoadMoreScrollListener() {
+        override fun loadMore() {
+            moreSearchImage()
+        }
+    }
+
     private var isAlreadySearch = false
+
+    private var searchPage = START_SEARCH_PAGE
+    private var currentSearchItemCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +57,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         setSearchAfterTextChangeEvent()
 
         binding.etSearch.setOnEditorActionListener { v, actionId, event ->
-            if (v.text.isNotEmpty() && actionId == EditorInfo.IME_ACTION_SEARCH) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 isAlreadySearch = true
                 Log.d("text", v.text.toString())
                 clearSearchFocus()
@@ -79,10 +92,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun searchImages() {
         val query = binding.etSearch.text.toString()
+        if (query.isEmpty()) {
+            binding.etSearch.error = getString(R.string.search_image_not_input_query)
+            return
+        }
 
         searchImageViewModel.searchImage(query, object : Result<SearchImageResult> {
             override fun onSuccess(result: SearchImageResult) {
                 searchImageAdapter.addAll(result.images)
+
+                searchPage = START_SEARCH_PAGE
+                currentSearchItemCount = result.images.size
+
+                if (currentSearchItemCount < result.meta.pageableCount) {
+                    binding.rvImage.addOnScrollListener(loadMoreScrollListener)
+                }
             }
 
             override fun onFail(t: Throwable) {
@@ -96,6 +120,42 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 )
             }
         })
+    }
+
+    private fun moreSearchImage() {
+        val query = binding.etSearch.text.toString()
+        if (query.isEmpty()) {
+            binding.etSearch.error = getString(R.string.search_image_not_input_query)
+            return
+        }
+
+        searchImageViewModel.moreSearchImages(
+            query,
+            searchPage,
+            object : Result<SearchImageResult> {
+                override fun onSuccess(result: SearchImageResult) {
+                    searchImageAdapter.addMore(result.images)
+
+                    searchPage += 1
+                    currentSearchItemCount += result.images.size
+                    loadMoreScrollListener.isLoading = false
+
+                    if (currentSearchItemCount >= result.meta.pageableCount) {
+                        binding.rvImage.removeOnScrollListener(loadMoreScrollListener)
+                    }
+                }
+
+                override fun onFail(t: Throwable) {
+                    Log.e(TAG, t.message, t)
+                    showNoTitleTwoButtonsDialog(
+                        getString(R.string.network_error_retry),
+                        getString(R.string.retry),
+                        { moreSearchImage() },
+                        getString(android.R.string.cancel),
+                        { }
+                    )
+                }
+            })
     }
 
     private fun clearSearchFocus() {
