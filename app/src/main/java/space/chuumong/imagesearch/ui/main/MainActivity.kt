@@ -13,6 +13,7 @@ import space.chuumong.imagesearch.ui.BaseActivity
 import space.chuumong.imagesearch.R
 import space.chuumong.imagesearch.databinding.ActivityMainBinding
 import space.chuumong.imagesearch.ui.adapter.SearchImageAdapter
+import space.chuumong.imagesearch.ui.view.showNoTitleTwoButtonsDialog
 import space.chuumong.imagesearch.utils.SoftKeyboardUtils
 import space.chuumong.imagesearch.utils.afterTextChangeEvents
 import space.chuumong.imagesearch.viewmodel.SearchImageViewModel
@@ -35,6 +36,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding.searchImageViewModel = searchImageViewModel
 
         binding.rvImage.layoutManager = LinearLayoutManager(this)
         binding.rvImage.adapter = searchImageAdapter
@@ -85,6 +87,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
             override fun onFail(t: Throwable) {
                 Log.e(TAG, t.message, t)
+                showNoTitleTwoButtonsDialog(
+                    getString(R.string.network_error_retry),
+                    getString(R.string.retry),
+                    { searchImages() },
+                    getString(android.R.string.cancel),
+                    { }
+                )
             }
         })
     }

@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">ImageSearch</string>
-    <string name="non_https_image_resource">보안 이슈로 이미지 로딩에 실패했습니다.</string>
-    <string name="fail_image_load">이미지 로드에 실패했습니다.</string>
+
+    <string name="network_error_retry">네트워크 통신중 에러가 발생하였습니다.\n다시 시도하시겠습니까?</string>
+
+    <string name="retry">재시도</string>
+
+    <string name="search_image_result_empty">검색결과가 존재하지 않습니다.</string>
 </resources>
